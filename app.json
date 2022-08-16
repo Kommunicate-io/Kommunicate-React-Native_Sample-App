@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "Kommunicate-React-Native-Sample-App",
+    "slug": "Kommunicate-React-Native-Sample-App",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  },
+  "name": "Kommunicate-React-Native-Sample-App"
+}
