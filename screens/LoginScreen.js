@@ -5,7 +5,7 @@ import { StyleSheet, Text, View, Button, Alert, TextInput, NativeModules } from 
 var RNKommunicateChat = NativeModules.RNKommunicateChat;
 
 const LoginScreen = ({ navigation }) => {
-    this.appid = "18ae6ce9d4f469f95c9c095fb5b0bda44"
+    global.appid = "18ae6ce9d4f469f95c9c095fb5b0bda44"
 
     state = {
         username: '',
@@ -25,7 +25,7 @@ const LoginScreen = ({ navigation }) => {
         var kmUser = {
           userId : userId,
           password: password,
-          applicationId : this.appid,  
+          applicationId : global.appid,  
           authenticationTypeId: 1,
           deviceApnsType : 0 
           };
@@ -65,10 +65,10 @@ const LoginScreen = ({ navigation }) => {
       );
 
     loginAsVisitor = () => {
-        if (this.appid.length === 0) {
+        if (global.appid.length === 0) {
             showAppidFailureAlert()
         } else {
-            RNKommunicateChat.loginAsVisitor(this.appid, (status, message) => {
+            RNKommunicateChat.loginAsVisitor(global.appid, (status, message) => {
                 if(status == 'Success') {
                   RNKommunicateChat.isLoggedIn((response) => {
                       if(response == "True") {
@@ -107,7 +107,6 @@ const LoginScreen = ({ navigation }) => {
       componentDidMount = () => {
         this.isLogged()
             .then(res => { 
-                console.log("pakka out")    
                 console.log("res")    
                 navigation.navigate(res);
             })
@@ -122,8 +121,12 @@ const LoginScreen = ({ navigation }) => {
         <TextInput secureTextEntry={true} placeholder="Password" onChangeText={(text) => {this.state.password=text}} style={styles.input}></TextInput>
         </View>
         <View style={styles.buttoncontainer}>
-          <Button title='Login' style={styles.button} onPress={() => loginUser()} alignItems='center'/>
+          <View style={styles.button}>
+          <Button title='Login' onPress={() => loginUser()} alignItems='center'/>
+          </View>
+          <View style={styles.button}>
           <Button title='Login as Visitor' style={styles.button} onPress={() => loginAsVisitor()} alignItems='center'/>
+          </View>
   
           {/* <LinearGradient start={{x:0,y: 0}} end={{x:1,y: 1}} colors={['#43e97b', '#38f9d7']} style={styles.button}><TouchableOpacity style={{padding: 10, alignItems: 'center'}} onPress={this.loginUser}><Text style={{color: 'white'}}>LOGIN</Text></TouchableOpacity></LinearGradient>
           <LinearGradient start={{x:0,y: 0}} end={{x:1,y: 1}} colors={['#f6d365', '#fda085']} style={styles.button}><TouchableOpacity style={{padding: 10, alignItems: 'center'}} onPress={this.loginVisitor}><Text style={{color: 'white'}}>LOGIN AS VISITOR</Text></TouchableOpacity></LinearGradient>
@@ -195,6 +198,7 @@ const styles = StyleSheet.create({
     button: {
       borderRadius: 30,
       marginBottom: 8,
+      marginTop:8,
     }
   });
 

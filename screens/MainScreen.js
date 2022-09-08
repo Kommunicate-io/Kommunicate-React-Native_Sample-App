@@ -34,7 +34,8 @@ const MainScreen = ({ navigation }) => {
         RNKommunicateChat.logout((response) => {
           if(response == "Success") {
             console.log("Logged out")
-            navigation.goBack()
+            // navigation.goBack()
+            navigation.navigate("Login");
           } else {
             console.log("Error logging out");
             showLogoutFailureAlert()
@@ -44,16 +45,21 @@ const MainScreen = ({ navigation }) => {
       
     return(
         <View style={style.mainView}>
-            <Button
-                title="Launch Conversation"
-                buttonStyle={style.button}
+          <View style={style.button}>
+          <Button
+                title="Launch Conversation"                
                 onPress={() => openConversation()}
             />
-             <Button
+          </View> 
+
+          <View style={style.button}>
+          <Button
                 title="Logout"
-                style={style.button}
                 onPress={() => logout()}
             />
+          </View> 
+          
+            
         </View>
     );
 }
