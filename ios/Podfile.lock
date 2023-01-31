@@ -32,17 +32,19 @@ PODS:
   - fmt (6.2.1)
   - glog (0.3.5)
   - Kingfisher (7.0.0)
-  - Kommunicate (6.6.0):
-    - KommunicateChatUI-iOS-SDK (~> 0.2.0)
-  - KommunicateChatUI-iOS-SDK (0.2.5):
-    - KommunicateChatUI-iOS-SDK/Complete (= 0.2.5)
-  - KommunicateChatUI-iOS-SDK/Complete (0.2.5):
+  - Kommunicate (6.7.5):
+    - KommunicateChatUI-iOS-SDK (~> 0.2.8)
+  - KommunicateChatUI-iOS-SDK (0.2.8):
+    - KommunicateChatUI-iOS-SDK/Complete (= 0.2.8)
+  - KommunicateChatUI-iOS-SDK/Complete (0.2.8):
     - Kingfisher (~> 7.0.0)
     - KommunicateChatUI-iOS-SDK/RichMessageKit
-    - KommunicateCore-iOS-SDK (~> 1.0.4)
+    - KommunicateCore-iOS-SDK (~> 1.0.7)
     - SwipeCellKit (~> 2.7.1)
-  - KommunicateChatUI-iOS-SDK/RichMessageKit (0.2.5)
-  - KommunicateCore-iOS-SDK (1.0.4)
+    - ZendeskChatProvidersSDK
+    - ZendeskChatSDK
+  - KommunicateChatUI-iOS-SDK/RichMessageKit (0.2.8)
+  - KommunicateCore-iOS-SDK (1.0.7)
   - RCT-Folly (2021.06.28.00-v2):
     - boost
     - DoubleConversion
@@ -237,6 +239,11 @@ PODS:
     - glog
     - RCT-Folly (= 2021.06.28.00-v2)
     - React-jsi/Default (= 0.69.4)
+  - React-jsi/Default (0.69.4):
+    - boost (= 1.76.0)
+    - DoubleConversion
+    - glog
+    - RCT-Folly (= 2021.06.28.00-v2)
   - React-jsiexecutor (0.69.4):
     - DoubleConversion
     - glog
@@ -319,14 +326,56 @@ PODS:
     - React-jsi (= 0.69.4)
     - React-logger (= 0.69.4)
     - React-perflogger (= 0.69.4)
-  - RNKommunicateChat (1.0.0):
-    - Kommunicate (~> 6.6.0)
+  - RNCMaskedView (0.1.11):
     - React
+  - RNGestureHandler (2.5.0):
+    - React-Core
+  - RNKommunicateChat (1.0.0):
+    - Kommunicate (~> 6.7.2)
+    - React
+  - RNReanimated (2.14.4):
+    - DoubleConversion
+    - FBLazyVector
+    - FBReactNativeSpec
+    - glog
+    - RCT-Folly
+    - RCTRequired
+    - RCTTypeSafety
+    - React-callinvoker
+    - React-Core
+    - React-Core/DevSupport
+    - React-Core/RCTWebSocket
+    - React-CoreModules
+    - React-cxxreact
+    - React-jsi
+    - React-jsiexecutor
+    - React-jsinspector
+    - React-RCTActionSheet
+    - React-RCTAnimation
+    - React-RCTBlob
+    - React-RCTImage
+    - React-RCTLinking
+    - React-RCTNetwork
+    - React-RCTSettings
+    - React-RCTText
+    - ReactCommon/turbomodule/core
+    - Yoga
   - RNScreens (3.15.0):
     - React-Core
     - React-RCTImage
   - SwipeCellKit (2.7.1)
   - Yoga (1.14.0)
+  - ZendeskChatProvidersSDK (3.0.0)
+  - ZendeskChatSDK (3.0.0):
+    - ZendeskChatProvidersSDK (= 3.0.0)
+    - ZendeskMessagingSDK (= 4.0.0)
+  - ZendeskCommonUISDK (7.0.0)
+  - ZendeskMessagingAPISDK (4.0.0):
+    - ZendeskSDKConfigurationsSDK (= 2.0.0)
+  - ZendeskMessagingSDK (4.0.0):
+    - ZendeskCommonUISDK (= 7.0.0)
+    - ZendeskMessagingAPISDK (= 4.0.0)
+  - ZendeskSDKConfigurationsSDK (2.0.0)
 
 DEPENDENCIES:
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
@@ -371,7 +420,10 @@ DEPENDENCIES:
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - React-runtimeexecutor (from `../node_modules/react-native/ReactCommon/runtimeexecutor`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
+  - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNKommunicateChat (from `../node_modules/react-native-kommunicate-chat`)
+  - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -383,6 +435,12 @@ SPEC REPOS:
     - KommunicateChatUI-iOS-SDK
     - KommunicateCore-iOS-SDK
     - SwipeCellKit
+    - ZendeskChatProvidersSDK
+    - ZendeskChatSDK
+    - ZendeskCommonUISDK
+    - ZendeskMessagingAPISDK
+    - ZendeskMessagingSDK
+    - ZendeskSDKConfigurationsSDK
 
 EXTERNAL SOURCES:
   boost:
@@ -467,8 +525,14 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/runtimeexecutor"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  RNCMaskedView:
+    :path: "../node_modules/@react-native-community/masked-view"
+  RNGestureHandler:
+    :path: "../node_modules/react-native-gesture-handler"
   RNKommunicateChat:
     :path: "../node_modules/react-native-kommunicate-chat"
+  RNReanimated:
+    :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
   Yoga:
@@ -491,9 +555,9 @@ SPEC CHECKSUMS:
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   glog: 3d02b25ca00c2d456734d0bcff864cbc62f6ae1a
   Kingfisher: 5efc54fec3980f92354898532e562cc17f31efb4
-  Kommunicate: b6a93db6b3e46e3a13a443e24cbacfa30eed91e8
-  KommunicateChatUI-iOS-SDK: 2507026e4630067caea09a1d36404a3fa3c146b7
-  KommunicateCore-iOS-SDK: f4cbf5ee3a11f869d7effaff4270823bb1336991
+  Kommunicate: e550ea9829325e1c26a24471417cee5bec8f3983
+  KommunicateChatUI-iOS-SDK: c97c187e6c87a6156526c3ddcfd504b2a1c9d881
+  KommunicateCore-iOS-SDK: dbcd925238d785a45181d03353a011e3634b23f9
   RCT-Folly: b9d9fe1fc70114b751c076104e52f3b1b5e5a95a
   RCTRequired: bd9d2ab0fda10171fcbcf9ba61a7df4dc15a28f4
   RCTTypeSafety: e44e139bf6ec8042db396201834fc2372f6a21cd
@@ -521,11 +585,20 @@ SPEC CHECKSUMS:
   React-RCTVibration: 9adb4a3cbb598d1bbd46a05256f445e4b8c70603
   React-runtimeexecutor: 61ee22a8cdf8b6bb2a7fb7b4ba2cc763e5285196
   ReactCommon: 8f67bd7e0a6afade0f20718f859dc8c2275f2e83
-  RNKommunicateChat: 22036a348dd99995f9af9ae224733bf900ffd895
+  RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
+  RNGestureHandler: bad495418bcbd3ab47017a38d93d290ebd406f50
+  RNKommunicateChat: b6853a4d26b041260f570c03310c882df91e0bdd
+  RNReanimated: ba021107f1dd90cb04c35c5d639392d5da27d065
   RNScreens: 4a1af06327774490d97342c00aee0c2bafb497b7
   SwipeCellKit: 3972254a826da74609926daf59b08d6c72e619ea
   Yoga: ff994563b2fd98c982ca58e8cd9db2cdaf4dda74
+  ZendeskChatProvidersSDK: af93e02e2058875f92e6ad86e74ee51203b4079e
+  ZendeskChatSDK: fe03650a5ebe3d35fd1f4da90792021f809bcf11
+  ZendeskCommonUISDK: f06dbac6c9e74c3afff75ecdc6bec3832b23258c
+  ZendeskMessagingAPISDK: 95a99f1eab9482b4106ec88466b93a89f9f7c5fa
+  ZendeskMessagingSDK: 4f5f3d43766bb3b2ea6411d1331cfe609ff33618
+  ZendeskSDKConfigurationsSDK: a5c21010e17b71d02bc2cfe73dcc9da1efa0a7b2
 
-PODFILE CHECKSUM: abe304fddd07edbed0f55cb99a59a93f49a90246
+PODFILE CHECKSUM: e786d46cb45956ed3125fc50d2d1f2c667d1bd06
 
 COCOAPODS: 1.11.3
