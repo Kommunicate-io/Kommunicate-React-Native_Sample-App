@@ -12,6 +12,16 @@ platform :ios, podfile_properties['ios.deploymentTarget'] || '15.0'
 install! 'cocoapods',
   :deterministic_uuids => false
 
+pre_install do |installer|
+ installer.pod_targets.each do |pod|
+   if pod.name.eql?('RCTView') || pod.name.eql?('RCTViewManager') || pod.name.eql?('RNCMaskedView') || pod.name.eql?('RCTEventEmitter') || pod.name.eql?('RCTRegisterModule') || pod.name.eql?('RNKommunicateChat')
+     def pod.build_type
+       Pod::BuildType.static_library
+     end
+   end
+  end
+end
+
 target 'KommunicateReactNativeSampleApp' do
   use_expo_modules!
   config = use_native_modules!
@@ -39,6 +49,19 @@ target 'KommunicateReactNativeSampleApp' do
   post_install do |installer|
     react_native_post_install(installer)
     __apply_Xcode_12_5_M1_post_install_workaround(installer)
+    installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = "arm64"
+    end
+  end
+  installer.pods_project.targets.each do |target|
+    if target.name == 'KommunicateChatUI-iOS-SDK'
+      target.build_configurations.each do |config|
+        config.build_settings['SWIFT_ACTIVE_COMPILATION_CONDITIONS'] ||= ['$(inherited)']
+        config.build_settings['SWIFT_ACTIVE_COMPILATION_CONDITIONS'] << 'SPEECH_REC'
+      end
+    end
+  end
   end
 
   post_integrate do |installer|
@@ -48,5 +71,6 @@ target 'KommunicateReactNativeSampleApp' do
       Pod::UI.warn e
     end
   end
+
 
 end
