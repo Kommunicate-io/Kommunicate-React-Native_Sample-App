@@ -82,15 +82,16 @@ def projectRoot = rootDir.getAbsoluteFile().getParentFile().getAbsolutePath()
 
 def reactNativeRoot = new File(["node", "--print", "require.resolve('react-native/package.json')"].execute(null, rootDir).text.trim()).getParentFile().getAbsolutePath()
 
+// Set up project.ext.react for Expo modules compatibility
+// Use index.js as entry file (as specified in package.json)
 project.ext.react = [
-    entryFile: ["node", "-e", "require('expo/scripts/resolveAppEntry')", projectRoot, "android"].execute(null, rootDir).text.trim(),
+    entryFile: "index.js",
     enableHermes: (findProperty('expo.jsEngine') ?: "jsc") == "hermes",
     hermesCommand: new File(["node", "--print", "require.resolve('react-native/package.json')"].execute(null, rootDir).text.trim()).getParentFile().getAbsolutePath() + "/sdks/hermesc/%OS-BIN%/hermesc",
     cliPath: "${reactNativeRoot}/cli.js",
     composeSourceMapsPath: "${reactNativeRoot}/scripts/compose-source-maps.js",
+    root: projectRoot,
 ]
-
-apply from: new File(reactNativeRoot, "react.gradle")
 
 /**
  * Set this to true to create two separate APKs instead of one:
@@ -127,7 +128,7 @@ def jscFlavor = 'org.webkit:android-jsc:+'
  * on project.ext.react, JavaScript will not be compiled to Hermes Bytecode
  * and the benefits of using Hermes will therefore be sharply reduced.
  */
-def enableHermes = project.ext.react.get("enableHermes", false);
+def enableHermes = (findProperty('expo.jsEngine') ?: "jsc") == "hermes";
 
 /**
  * Architectures to build native code for.
@@ -138,9 +139,18 @@ def reactNativeArchitectures() {
 }
 
 android {
+    namespace "com.kommunicatereactnativesampleapp"
+    
     ndkVersion rootProject.ext.ndkVersion
 
     compileSdkVersion rootProject.ext.compileSdkVersion
+    
+    buildFeatures {
+        buildConfig true
+    }
+    
+    // Set hermesEnabled for expo-modules-core compatibility
+    project.ext.hermesEnabled = (findProperty('expo.jsEngine') ?: "jsc") == "hermes"
 
     defaultConfig {
         applicationId "com.kommunicatereactnativesampleapp"
@@ -148,6 +158,7 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
 
         if (isNewArchitectureEnabled()) {
@@ -231,6 +242,19 @@ android {
             include (*reactNativeArchitectures())
         }
     }
+    
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+        // Disable desugaring to fix D8 NullPointerException errors
+        // minSdkVersion 21 doesn't require desugaring for Java 17 features
+    }
+    
+    packagingOptions {
+        pickFirst '**/libc++_shared.so'
+        pickFirst '**/libfbjni.so'
+    }
+    
     signingConfigs {
         debug {
             storeFile file('debug.keystore')
@@ -242,6 +266,7 @@ android {
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
+            // In debug mode, bundle JS is skipped by default - app loads from Metro bundler
         }
         release {
             // Caution! In production, you need to generate your own keystore file.
@@ -249,6 +274,34 @@ android {
             signingConfig signingConfigs.debug
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+        }
+    }
+    
+    // Add task to bundle JavaScript for release builds
+    afterEvaluate {
+        def bundleTask = tasks.findByName("bundleReleaseJsAndAssets")
+        if (bundleTask == null) {
+            // Create bundle task if it doesn't exist (for React Native 0.72+ without react.gradle)
+            task bundleReleaseJsAndAssets(type: Exec) {
+                group = "react"
+                description = "Bundle React Native JS and assets for release"
+                commandLine = [
+                    "node",
+                    "${reactNativeRoot}/cli.js",
+                    "bundle",
+                    "--platform", "android",
+                    "--dev", "false",
+                    "--entry-file", project.ext.react.entryFile,
+                    "--bundle-output", "$buildDir/intermediates/assets/release/index.android.bundle",
+                    "--assets-dest", "$buildDir/intermediates/res/merged/release",
+                    "--minify", "true"
+                ]
+                doFirst {
+                    mkdir("$buildDir/intermediates/assets/release")
+                    mkdir("$buildDir/intermediates/res/merged/release")
+                }
+            }
+            tasks.findByName("mergeReleaseResources")?.dependsOn(bundleReleaseJsAndAssets)
         }
     }
 
@@ -291,8 +344,8 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
 
-    //noinspection GradleDynamicVersion
-    implementation "com.facebook.react:react-native:+"  // From node_modules
+    // React Native 0.72+ uses react-android from Maven Central
+    implementation("com.facebook.react:react-android")
 
     def isGifEnabled = (findProperty('expo.gif.enabled') ?: "") == "true";
     def isWebpEnabled = (findProperty('expo.webp.enabled') ?: "") == "true";
@@ -320,6 +373,7 @@ dependencies {
     }
 
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
+    implementation "androidx.multidex:multidex:2.0.1"
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
         exclude group:'com.facebook.fbjni'
     }

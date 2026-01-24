@@ -7,7 +7,7 @@ apply from: new File(["node", "--print", "require.resolve('@react-native-communi
 applyNativeModulesSettingsGradle(settings)
 
 include ':app'
-includeBuild(new File(["node", "--print", "require.resolve('react-native-gradle-plugin/package.json')"].execute(null, rootDir).text.trim()).getParentFile())
+// React Native 0.72 doesn't require includeBuild for gradle plugin - it's handled via classpath
 
 if (settings.hasProperty("newArchEnabled") && settings.newArchEnabled == "true") {
   include(":ReactAndroid")
