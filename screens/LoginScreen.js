@@ -5,7 +5,7 @@ import { StyleSheet, Text, View, Button, Alert, TextInput, NativeModules } from 
 var RNKommunicateChat = NativeModules.RNKommunicateChat;
 
 const LoginScreen = ({ navigation }) => {
-    global.appid = "18ae6ce9d4f469f95c9c095fb5b0bda44"
+    global.appid = "305d5becded8f4ed0b777f754300625a8"
 
     state = {
         username: '',

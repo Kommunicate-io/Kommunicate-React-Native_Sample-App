@@ -46,7 +46,7 @@ export default MyStack
 // var RNKommunicateChat = NativeModules.RNKommunicateChat;
 // export default
  function App() {
-  this.appid = "18ae6ce9d4f469f95c9c095fb5b0bda44"
+  this.appid = "305d5becded8f4ed0b777f754300625a8"
 
   // constructor() {
   //   super();
