@@ -6,57 +6,43 @@ import RNKommunicateChat from 'react-native-kommunicate-chat';
 
 
 const MainScreen = ({ navigation }) => {
-    // var RNKommunicateChat = NativeModules.RNKommunicateChat;
-
-    openConversation = () => {
-        RNKommunicateChat.openConversation((status, message) => {
-          if(status == 'Error') {
-            console.log("Error in opening conversation : " + message);
-          }
-        });
-      }
-
-      const showLogoutFailureAlert = () =>
+    const showLogoutFailureAlert = () =>
         Alert.alert(
             "Failed to Logout",
             "Couldn't log you out. Please try again",
             [
-            {
-                text: "Cancel",
-                onPress: () => console.log("Cancel Pressed"),
-                style: "cancel"
-            },
-            { text: "OK", onPress: () => console.log("OK Pressed") }
+                { text: "Cancel", onPress: () => {}, style: "cancel" },
+                { text: "OK", onPress: () => {} }
             ]
-      );
+        );
 
-      logout = () => {
+    const openConversation = () => {
+        RNKommunicateChat.openConversation((status, message) => {
+            if (status === 'Error') {
+                console.log("Error in opening conversation : " + message);
+            }
+        });
+    };
+
+    const logout = () => {
         RNKommunicateChat.logout((response) => {
-          if(response == "Success") {
-            console.log("Logged out")
-            // navigation.goBack()
-            navigation.navigate("Login");
-          } else {
-            console.log("Error logging out");
-            showLogoutFailureAlert()
-          }
-        }); 
-      }
-      
-    return(
-        <View style={style.mainView}>
-          <View style={style.button}>
-          <Button
-                title="Launch Conversation"                
-                onPress={() => openConversation()}
-            />
-          </View> 
+            if (response === "Success") {
+                console.log("Logged out");
+                navigation.navigate("Login");
+            } else {
+                console.log("Error logging out");
+                showLogoutFailureAlert();
+            }
+        });
+    };
 
-          <View style={style.button}>
-          <Button
-                title="Logout"
-                onPress={() => logout()}
-            />
+    return (
+        <View style={styles.mainView}>
+          <View style={styles.button}>
+            <Button title="Launch Conversation" onPress={openConversation} />
+          </View>
+          <View style={styles.button}>
+            <Button title="Logout" onPress={logout} />
           </View> 
           
             
@@ -64,7 +50,7 @@ const MainScreen = ({ navigation }) => {
     );
 }
 
-const style = StyleSheet.create({
+const styles = StyleSheet.create({
     mainView: {
         marginTop:40,
         flex:1,

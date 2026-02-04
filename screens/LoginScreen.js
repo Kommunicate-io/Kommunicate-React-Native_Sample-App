@@ -1,144 +1,107 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, View, Button, Alert, TextInput, NativeModules } from 'react-native';
 
+const RNKommunicateChat = NativeModules.RNKommunicateChat;
 
-var RNKommunicateChat = NativeModules.RNKommunicateChat;
+global.appid = global.appid || "305d5becded8f4ed0b777f754300625a8";
 
 const LoginScreen = ({ navigation }) => {
-    global.appid = "305d5becded8f4ed0b777f754300625a8"
-
-    state = {
-        username: '',
-        password: ''
-    }
-
-    loginUser = () => {
-        var userId = this.state.username
-        var email = this.state.email
-        var password = this.state.password
-        console.log('UserName and password cannot be empty.');
-        if(userId == '' || password == '') {
-          console.log('UserName and password cannot be empty.');
-          return;
-        }
-        
-        var kmUser = {
-          userId : userId,
-          password: password,
-          applicationId : global.appid,  
-          authenticationTypeId: 1,
-          deviceApnsType : 0 
-          };
-  
-          RNKommunicateChat.loginUser(kmUser, (status, message) => {
-            if(status == 'Success') {
-              RNKommunicateChat.isLoggedIn((response) => {
-                  if(response == "True") {
-                    // this.props.navigation.navigate('Home');
-                    console.log("Logged in")
-                    navigation.navigate('Main')
-  
-                  } else {
-                    console.log("Error logging in")
-                  }
-                });
-                // this.props.navigation.replace('Home');
-           
-            } else if (status == 'Error') {
-                console.log("Error logging in : " + message);
-            }
-        });
-    }
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
 
     const showAppidFailureAlert = () =>
         Alert.alert(
             "Failed to Login",
             "AppId is empty. Update the Update AppId & try again!!",
             [
-            {
-                text: "Cancel",
-                onPress: () => console.log("Cancel Pressed"),
-                style: "cancel"
-            },
-            { text: "OK", onPress: () => console.log("OK Pressed") }
+                { text: "Cancel", onPress: () => {}, style: "cancel" },
+                { text: "OK", onPress: () => {} }
             ]
-      );
+        );
 
-    loginAsVisitor = () => {
-        if (global.appid.length === 0) {
-            showAppidFailureAlert()
+    const loginUser = () => {
+        if (username === '' || password === '') {
+            console.log('UserName and password cannot be empty.');
+            return;
+        }
+        const kmUser = {
+            userId: username,
+            password: password,
+            applicationId: global.appid,
+            authenticationTypeId: 1,
+            deviceApnsType: 0
+        };
+        RNKommunicateChat.loginUser(kmUser, (status, message) => {
+            if (status === 'Success') {
+                RNKommunicateChat.isLoggedIn((response) => {
+                    if (response === "True") {
+                        console.log("Logged in");
+                        navigation.navigate('Main');
+                    } else {
+                        console.log("Error logging in");
+                    }
+                });
+            } else if (status === 'Error') {
+                console.log("Error logging in : " + message);
+            }
+        });
+    };
+
+    const loginAsVisitor = () => {
+        if (!global.appid || global.appid.length === 0) {
+            showAppidFailureAlert();
         } else {
             RNKommunicateChat.loginAsVisitor(global.appid, (status, message) => {
-                if(status == 'Success') {
-                  RNKommunicateChat.isLoggedIn((response) => {
-                      if(response == "True") {
-                        console.log("Logged in" + message);
-                        navigation.navigate('Main')
-                      } else {
-                        console.log("Error logging in : " + message);
-                      }
-                    });               
-                } else if (obj == 'Error') {
-                  console.log("Error logging in : " + message);
+                if (status === 'Success') {
+                    RNKommunicateChat.isLoggedIn((response) => {
+                        if (response === "True") {
+                            console.log("Logged in " + message);
+                            navigation.navigate('Main');
+                        } else {
+                            console.log("Error logging in : " + message);
+                        }
+                    });
+                } else if (status === 'Error') {
+                    console.log("Error logging in : " + message);
                 }
             });
         }
-      }
+    };
 
-      logout = () => {
-        RNKommunicateChat.logout((response) => {
-          if(response == "Success") {
-            console.log("Logged out")    
-          } else {
-            console.log("Error logging out");
-          }
-        }); 
-      }
-
-      isLogged = () => {
-        RNKommunicateChat.isLoggedIn((response) => {
-            if(response == "True") {
-            return "Main"
-            } else {
-              return "Login"
-            }
-          });       
-      }
-      componentDidMount = () => {
-        this.isLogged()
-            .then(res => { 
-                console.log("res")    
-                navigation.navigate(res);
-            })
-            .catch(err => alert('An error occurred'))
-    }
-    
-      
-      return(<View style={styles.maincontainer}>
-        <Text style={styles.title}>Kommunicate React Native Sample App</Text>
-        <View style={styles.inputcontainer}>
-        <TextInput placeholder="User Name" onChangeText={(text) => {this.state.username=text}} style={styles.input}></TextInput>
-        <TextInput secureTextEntry={true} placeholder="Password" onChangeText={(text) => {this.state.password=text}} style={styles.input}></TextInput>
+    return (
+        <View style={styles.maincontainer}>
+            <Text style={styles.title}>Kommunicate React Native Sample App</Text>
+            <View style={styles.inputcontainer}>
+                <TextInput
+                    placeholder="User Name"
+                    value={username}
+                    onChangeText={setUsername}
+                    style={styles.input}
+                />
+                <TextInput
+                    secureTextEntry
+                    placeholder="Password"
+                    value={password}
+                    onChangeText={setPassword}
+                    style={styles.input}
+                />
+            </View>
+            <View style={styles.buttoncontainer}>
+                <View style={styles.button}>
+                    <Button title="Login" onPress={loginUser} />
+                </View>
+                <View style={styles.button}>
+                    <Button title="Login as Visitor" onPress={loginAsVisitor} />
+                </View>
+                <Text style={styles.infotext}>
+                    When logging in as visitor, you dont need to fill the email, name and
+                    password fields. Clicking the 'Login as visitor' button will log you in with a random userId.
+                </Text>
+            </View>
+            <Text style={styles.privacytext} />
         </View>
-        <View style={styles.buttoncontainer}>
-          <View style={styles.button}>
-          <Button title='Login' onPress={() => loginUser()} alignItems='center'/>
-          </View>
-          <View style={styles.button}>
-          <Button title='Login as Visitor' style={styles.button} onPress={() => loginAsVisitor()} alignItems='center'/>
-          </View>
-  
-          {/* <LinearGradient start={{x:0,y: 0}} end={{x:1,y: 1}} colors={['#43e97b', '#38f9d7']} style={styles.button}><TouchableOpacity style={{padding: 10, alignItems: 'center'}} onPress={this.loginUser}><Text style={{color: 'white'}}>LOGIN</Text></TouchableOpacity></LinearGradient>
-          <LinearGradient start={{x:0,y: 0}} end={{x:1,y: 1}} colors={['#f6d365', '#fda085']} style={styles.button}><TouchableOpacity style={{padding: 10, alignItems: 'center'}} onPress={this.loginVisitor}><Text style={{color: 'white'}}>LOGIN AS VISITOR</Text></TouchableOpacity></LinearGradient>
-          <LinearGradient start={{x:0,y: 0}} end={{x:1,y: 1}} colors={['#f6d365', '#fda085']} style={styles.button}><TouchableOpacity style={{padding: 10, alignItems: 'center'}} onPress={this.createConversation}><Text style={{color: 'white'}}>Create Conversation without login</Text></TouchableOpacity></LinearGradient> */}
-          <Text style={styles.infotext}>When logging in as visitor, you dont need to fill the email, name and 
-          password fields. Clicking the 'Login as visitor' button will log you in with a random userId.</Text>
-        </View>
-        <Text style={styles.privacytext}></Text>
-      </View>);
-        
-    // );
-}
+    );
+};
 
 const style = StyleSheet.create({
     mainView: {
