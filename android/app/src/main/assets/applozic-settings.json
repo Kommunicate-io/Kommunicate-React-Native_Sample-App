@@ -1,10 +1,11 @@
 {
 
 "attachmentOptions": {
-    ":location": false,
+    ":location": true,
     ":camera": true,
     ":file": true,
     ":audio": true,
     ":video": true
   }
+
 }
