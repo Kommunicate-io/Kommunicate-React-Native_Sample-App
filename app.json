@@ -5,7 +5,15 @@
     "version": "1.0.0",
     "assetBundlePatterns": [
       "**/*"
-    ]
-  },
-  "name": "Kommunicate-React-Native-Sample-App"
+    ],
+    "plugins": [
+      "./plugins/withKommunicateModularHeaders"
+    ],
+    "android": {
+      "package": "com.anonymous.KommunicateReactNativeSampleApp"
+    },
+    "ios": {
+      "bundleIdentifier": "com.anonymous.KommunicateReactNativeSampleApp"
+    }
+  }
 }
