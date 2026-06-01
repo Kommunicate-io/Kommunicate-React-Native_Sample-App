@@ -5875,10 +5875,10 @@ react-is@^18.0.0:
     lodash "^4.17.21"
     prop-types "^15.7.2"
 
-react-native-kommunicate-chat@^2.5.8:
-  version "2.5.8"
-  resolved "https://registry.npmjs.org/react-native-kommunicate-chat/-/react-native-kommunicate-chat-2.5.8.tgz"
-  integrity sha512-/pxzVfdcfM+5aeVSj1C9uL2NdhHG14NNEeRfn72Ow/i3VblcS0yTm4SpY8/u4h9gTgUNtQzUyv/7kT+GsPKodA==
+react-native-kommunicate-chat@^2.6.1:
+  version "2.6.1"
+  resolved "https://registry.npmjs.org/react-native-kommunicate-chat/-/react-native-kommunicate-chat-2.6.1.tgz"
+  integrity sha512-zwms03TiCUMevusUz+VwEaAWjBVzWUaGQz7K3R05epH5Ti0Sx/zlH8zKIDtu5HiNlawgCjbIvS8qOIX06/CJ5Q==
 
 react-native-reanimated@~3.3.0:
   version "3.3.0"

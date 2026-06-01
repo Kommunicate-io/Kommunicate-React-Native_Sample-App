@@ -6,7 +6,13 @@
 #import <React/RCTLinkingManager.h>
 #import <React/RCTConvert.h>
 
+// Under use_frameworks!, RCTAppSetupUtils.h lives in the React-RCTAppDelegate pod
+// rather than the React umbrella, so fall back to a direct include.
+#if __has_include(<React/RCTAppSetupUtils.h>)
 #import <React/RCTAppSetupUtils.h>
+#else
+#import "RCTAppSetupUtils.h"
+#endif
 
 #if RCT_NEW_ARCH_ENABLED
 #import <React/CoreModulesPlugins.h>
@@ -33,7 +39,7 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-  RCTAppSetupPrepareApp(application);
+  RCTAppSetupPrepareApp(application, NO);
 
   RCTBridge *bridge = [self.reactDelegate createBridgeWithDelegate:self launchOptions:launchOptions];
 
