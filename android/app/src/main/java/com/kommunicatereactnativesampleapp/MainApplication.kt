@@ -1,4 +1,4 @@
-package com.anonymous.KommunicateReactNativeSampleApp
+package com.kommunicatereactnativesampleapp
 
 import android.app.Application
 import android.content.res.Configuration

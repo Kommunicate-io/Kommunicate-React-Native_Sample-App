@@ -11,15 +11,16 @@
       "expo-status-bar"
     ],
     "android": {
-      "package": "com.anonymous.KommunicateReactNativeSampleApp",
+      "package": "com.kommunicatereactnativesampleapp",
       "permissions": [
         "android.permission.ACCESS_COARSE_LOCATION",
         "android.permission.ACCESS_FINE_LOCATION",
         "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.READ_MEDIA_AUDIO",
         "android.permission.READ_MEDIA_IMAGES",
         "android.permission.READ_MEDIA_VIDEO"
       ]
     }
-  },
-  "name": "Kommunicate-React-Native-Sample-App"
+  }
 }
