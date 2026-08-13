@@ -1,21 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, View, Button, Alert, TextInput, NativeModules } from 'react-native';
 
 
 var RNKommunicateChat = NativeModules.RNKommunicateChat;
 
 const LoginScreen = ({ navigation }) => {
-    global.appid = "305d5becded8f4ed0b777f754300625a8"
+    global.appid = "1de229e1897fa19317af97b7b6acdee7c"
 
-    state = {
-        username: '',
-        password: ''
-    }
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
 
-    loginUser = () => {
-        var userId = this.state.username
-        var email = this.state.email
-        var password = this.state.password
+    const loginUser = () => {
+        const userId = username;
         console.log('UserName and password cannot be empty.');
         if(userId == '' || password == '') {
           console.log('UserName and password cannot be empty.');
@@ -64,7 +60,7 @@ const LoginScreen = ({ navigation }) => {
             ]
       );
 
-    loginAsVisitor = () => {
+    const loginAsVisitor = () => {
         if (global.appid.length === 0) {
             showAppidFailureAlert()
         } else {
@@ -78,14 +74,14 @@ const LoginScreen = ({ navigation }) => {
                         console.log("Error logging in : " + message);
                       }
                     });               
-                } else if (obj == 'Error') {
+                } else if (status == 'Error') {
                   console.log("Error logging in : " + message);
                 }
             });
         }
       }
 
-      logout = () => {
+      const logout = () => {
         RNKommunicateChat.logout((response) => {
           if(response == "Success") {
             console.log("Logged out")    
@@ -95,7 +91,7 @@ const LoginScreen = ({ navigation }) => {
         }); 
       }
 
-      isLogged = () => {
+      const isLogged = () => {
         RNKommunicateChat.isLoggedIn((response) => {
             if(response == "True") {
             return "Main"
@@ -104,21 +100,11 @@ const LoginScreen = ({ navigation }) => {
             }
           });       
       }
-      componentDidMount = () => {
-        this.isLogged()
-            .then(res => { 
-                console.log("res")    
-                navigation.navigate(res);
-            })
-            .catch(err => alert('An error occurred'))
-    }
-    
-      
       return(<View style={styles.maincontainer}>
         <Text style={styles.title}>Kommunicate React Native Sample App</Text>
         <View style={styles.inputcontainer}>
-        <TextInput placeholder="User Name" onChangeText={(text) => {this.state.username=text}} style={styles.input}></TextInput>
-        <TextInput secureTextEntry={true} placeholder="Password" onChangeText={(text) => {this.state.password=text}} style={styles.input}></TextInput>
+        <TextInput placeholder="User Name" value={username} onChangeText={setUsername} style={styles.input}></TextInput>
+        <TextInput secureTextEntry={true} placeholder="Password" value={password} onChangeText={setPassword} style={styles.input}></TextInput>
         </View>
         <View style={styles.buttoncontainer}>
           <View style={styles.button}>

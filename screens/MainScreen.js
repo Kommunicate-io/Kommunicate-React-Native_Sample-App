@@ -1,14 +1,12 @@
 import React from 'react';
-import { Text, StyleSheet, Button, View, ScrollView, Alert } from 'react-native';
+import { StyleSheet, Button, View, Alert } from 'react-native';
 import RNKommunicateChat from 'react-native-kommunicate-chat';
 
 
 
 
 const MainScreen = ({ navigation }) => {
-    // var RNKommunicateChat = NativeModules.RNKommunicateChat;
-
-    openConversation = () => {
+    const openConversation = () => {
         RNKommunicateChat.openConversation((status, message) => {
           if(status == 'Error') {
             console.log("Error in opening conversation : " + message);
@@ -30,12 +28,11 @@ const MainScreen = ({ navigation }) => {
             ]
       );
 
-      logout = () => {
+      const logout = () => {
         RNKommunicateChat.logout((response) => {
           if(response == "Success") {
             console.log("Logged out")
-            // navigation.goBack()
-            navigation.navigate("Login");
+            navigation.replace("Login");
           } else {
             console.log("Error logging out");
             showLogoutFailureAlert()
@@ -48,14 +45,14 @@ const MainScreen = ({ navigation }) => {
           <View style={style.button}>
           <Button
                 title="Launch Conversation"                
-                onPress={() => openConversation()}
+                onPress={openConversation}
             />
           </View> 
 
           <View style={style.button}>
           <Button
                 title="Logout"
-                onPress={() => logout()}
+                onPress={logout}
             />
           </View> 
           
@@ -81,4 +78,3 @@ const style = StyleSheet.create({
 
 
 export default MainScreen
-
